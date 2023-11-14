@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.ProductorderMapper">
+    <insert id="insertProductorder">
+        INSERT INTO productorder
+        (productorderCode, productorderAddress, productorderDetailAddress, productorderPost, productorderReceiver,
+         productorderMobile, productorderStatus, productorderUserId)
+        values (#{productOrderCode}, #{productOrderAddress}, #{productOrderDetailAddress}, #{productOrderPost},
+                #{productOrderReceiver}, #{productOrderMobile}, #{productOrderStatus}, #{productOrderUserId})
+    </insert>
+    <update id="updateProductorderProductorderStatusByProductorderId">
+        UPDATE productorder
+        SET productorderStatus      = 3,
+            productorderConfirmDate = #{productorderConfirmDate}
+        WHERE productorderCode = #{productorderCode}
+    </update>
+    <update id="updateProductorderProductorderStatusAndProductorderDeliveryDateByProductorderId">
+        UPDATE productorder
+        SET productorderStatus       = 2,
+            productorderDeliveryDate = #{productorderDeliveryDate}
+        WHERE productorderCode = #{productorderCode}
+    </update>
+    <update id="updateProductorderProductorderStatusAndProductorderPayDateByProductorderId">
+        UPDATE productorder
+        SET productorderStatus  = 1,
+            productorderPayDate = #{productorderPayDate}
+        WHERE productorderCode = #{productorderCode}
+    </update>
+    <delete id="deleteProductorderByProductorderCode">
+        DELETE
+        FROM productorder
+        WHERE productorderCode = #{productorderCode}
+    </delete>
+    <select id="selectProductordersByDate" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderPayDate &gt;= #{beginDate}
+          AND productorderConfirmDate &lt;= #{endDate}
+    </select>
+    <select id="selectProductordersSucceedCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM productorder
+        WHERE productorderStatus = 3
+    </select>
+    <select id="selectProductordersOrderTotalArray" resultType="java.lang.Integer">
+        SELECT SUM(productorderitem.productorderitemPrice) AS total_price
+        FROM productorder
+                 INNER JOIN productorderitem ON productorderitem.productorderitemId = productorder.productorderUserId
+        WHERE productorder.productorderPayDate &gt;= #{beginDate}
+          AND productorder.productorderConfirmDate &lt;= #{endDate}
+    </select>
+    <select id="selectProductOrderByProductorderUserId" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderUserId = #{productorderUserId}
+    </select>
+    <select id="selectProductorderByProductorderCode" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderCode = #{productorderCode}
+    </select>
+    <select id="selectProductorderByProductorderUserIdAndProductorderId"
+            resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderUserId = #{productorderUserId}
+        ORDER BY productorderId DESC
+        LIMIT 1;
+    </select>
+    <select id="selectProductorderByProductorderPayDateIsNullAndUserId"
+            resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderPayDate IS NULL
+          AND productorderUserId = #{userId}
+    </select>
+    <select id="selectProductorderByProductorderId" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT *
+        FROM productorder
+        WHERE productorderId = #{productorderId}
+    </select>
+    <select id="selectOrderTotalArray" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT DATE(productorderPayDate)  AS orderDate,
+               SUM(productorderitemPrice) AS dailyTotal
+        FROM productorder
+                 JOIN
+             productorderitem ON productorder.productorderId = productorderitem.productorderitemOrderId
+        WHERE productorderPayDate BETWEEN #{beginDate} AND #{endDate}
+        GROUP BY orderDate
+
+    </select>
+    <select id="selectOrderSuccessArray" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT
+            DATE(productorderPayDate) AS orderDate,
+            COUNT(*) AS orderCount
+        FROM
+            productorder
+        WHERE
+            productorderPayDate BETWEEN #{beginDate} AND #{endDate}
+          AND productorderStatus = 3
+        GROUP BY
+            orderDate;
+    </select>
+    <select id="selectOrderUnconfirmedArray" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT
+            DATE(productorderPayDate) AS orderDate,
+            COUNT(*) AS orderCount2
+        FROM
+            productorder
+        WHERE
+            productorderPayDate BETWEEN #{beginDate} AND #{endDate}
+          AND productorderStatus = 2
+        GROUP BY
+            orderDate;
+    </select>
+    <select id="selectOrderNotShippedArray" resultType="com.seqq.springboot_mall.entity.Productorder">
+        SELECT
+            DATE(productorderPayDate) AS orderDate,
+            COUNT(*) AS orderCount3
+        FROM
+            productorder
+        WHERE
+            productorderPayDate BETWEEN #{beginDate} AND #{endDate}
+          AND productorderStatus = 1
+        GROUP BY
+            orderDate;
+    </select>
+
+
+</mapper>

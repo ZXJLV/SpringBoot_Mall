@@ -1,35 +1,45 @@
 $(function () {
     //刷新下拉框
     $('#select_user_address_province').selectpicker('refresh');
+    $('#select_user_address_province').val(-1)
     $('#select_user_address_city').selectpicker('refresh');
     $('#select_user_address_district').selectpicker('refresh');
     //改变订单信息时
     $('#select_user_address_province').change(function () {
+        let addressAreaId = $(this).val()
         $.ajax({
             type: "GET",
-            url: contextPath+"/address/" + $(this).val(),
-            data: null,
+            url: contextPath+"/address",
+            data: {addressAreaId: addressAreaId},
             dataType: "json",
             success: function (data) {
+                console.log(data);
+                console.log(data.cityList);
                 $(".loader").hide();
-                if (data.success) {
+                if (true) {
                     $("#select_user_address_city").empty();
                     $("#select_user_address_district").empty();
-                    for (var i = 0; i < data.addressList.length; i++) {
-                        var address_id = data.addressList[i].addressAreaId;
-                        var addressName = data.addressList[i].addressName;
+                    for (var i = 0; i < data.cityList.length; i++) {
+                        console.log(88888888888)
+
+                        var address_id = data.cityList[i].addressAreaId;
+                        var addressName = data.cityList[i].addressName;
+                        console.log("addressName:"+data.cityList[5].addressName);
                         $("#select_user_address_city").append("<option value='" + address_id + "'>" + addressName + "</option>")
                     }
-                    for (var j = 0; j < data.childAddressList.length; j++) {
-                        var childAddress_id = data.childAddressList[j].addressAreaId;
-                        var childAddress_name = data.childAddressList[j].addressName;
+                    for (var j = 0; j < data.districtList.length; j++) {
+                        var childAddress_id = data.districtList[j].addressAreaId;
+                        var childAddress_name = data.districtList[j].addressName;
                         $("#select_user_address_district").append("<option value='" + childAddress_id + "'>" + childAddress_name + "</option>")
                     }
                     $('#select_user_address_city').selectpicker('refresh');
                     $("#select_user_address_district").selectpicker('refresh');
+
                     $("span.address-province").text($("#select_user_address_province").find("option:selected").text());
                     $("span.address-city").text($("#select_user_address_city").find("option:selected").text());
                     $("span.address_district").text($("#select_user_address_district").find("option:selected").text());
+
+
                 } else {
                     alert("加载地区信息失败，请刷新页面再试！")
                 }
@@ -38,23 +48,26 @@ $(function () {
                 $(".loader").show();
             },
             error: function () {
-                alert("加载地区信息失败，请刷新页面再试！")
+                alert("加载地区信息失败，请刷新页面再试！！！！")
             }
         });
     });
+
     $("#select_user_address_city").change(function () {
+        let addressAreaId = $(this).val()
         $.ajax({
             type: "GET",
-            url: contextPath+"/address/" + $(this).val(),
-            data: null,
+            url: contextPath+"/address",
+            data: {addressAreaId: addressAreaId},
             dataType: "json",
             success: function (data) {
+                console.log(data);
                 $(".loader").hide();
-                if (data.success) {
+                if (data!==null) {
                     $("#select_user_address_district").empty();
-                    for (var i = 0; i < data.addressList.length; i++) {
-                        var address_id = data.addressList[i].addressAreaId;
-                        var addressName = data.addressList[i].addressName;
+                    for (var i = 0; i < data.cityList.length; i++) {
+                        var address_id = data.cityList[i].addressAreaId;
+                        var addressName = data.cityList[i].addressName;
                         $("#select_user_address_district").append("<option value='" + address_id + "'>" + addressName + "</option>")
                     }
                     $('#select_user_address_district').selectpicker('refresh');
@@ -68,7 +81,7 @@ $(function () {
                 $(".loader").show();
             },
             error: function () {
-                alert("加载地区信息失败，请刷新页面再试！")
+                alert("加载地区信息失败，请刷新页面再试！！！！")
             }
         });
     });
@@ -113,7 +126,6 @@ $(function () {
 
     //非空验证
     $("#register_sub").click(function () {
-        alert(contextPath);
         //用户名
         var userName = $.trim($("input[name=userName]").val());
         //密码
@@ -162,7 +174,7 @@ $(function () {
         }
         $.ajax({
             type: "POST",
-            url: contextPath+"/register/doRegister",
+            url: contextPath+"/doRegister",
             data: {
                 "userName": userName,
                 "userPassword": userPassword,
@@ -173,14 +185,14 @@ $(function () {
             },
             dataType: "json",
             success: function (data) {
-                if (data.success) {
+                if (data>0) {
                     $(".msg").stop(true, true).animate({
                         opacity: 1
                     }, 550, function () {
                         $(".msg").animate({
                             opacity: 0
                         }, 1500, function () {
-                            location.href = contextPath+"/login";
+                            location.href = contextPath+"/foreQuit";
                         });
                     });
                 } else {

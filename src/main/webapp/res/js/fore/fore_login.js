@@ -45,13 +45,13 @@ $(function () {
         if (yn) {
             $.ajax({
                 type: "POST",
-                url: contextPath + "/login/doLogin",
-                data: {"username": $.trim($("#name").val()), "password": $.trim($("#password").val())},
+                url: contextPath + "/foreLogin",
+                data: {"userName": $.trim($("#name").val()), "userPassword": $.trim($("#password").val())},
                 dataType: "json",
                 success: function (data) {
                     $(".loginButton").val("登 录");
                     if (data.success) {
-                        location.href = contextPath+"/";
+                        location.href = contextPath+"/toHomePage";
                     } else {
                         styleUtil.errorShow($("#error_message_p"), "用户名和密码错误！");
                     }

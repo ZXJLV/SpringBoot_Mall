@@ -17,7 +17,7 @@
                     data: null,
                     dataType: "json",
                     success: function (data) {
-                        if (data.success !== true) {
+                        if (data!=null) {
                             alert("购物车商品删除异常，请稍候再试！");
                         }
                         location.href = "/mall/cart";
@@ -45,6 +45,7 @@
 <body>
 <nav>
     <%@ include file="include/navigator.jsp" %>
+    <input type="hidden" id="userId" value="${sessionScope.user.userId}">
     <div class="header">
         <div id="mallLogo">
             <a href="${ctx}"><img
@@ -55,7 +56,7 @@
             <form action="${ctx}/product" method="get">
                 <div class="shopSearchInput">
                     <input type="text" class="searchInput" name="productName" placeholder="搜索 商品/品牌/店铺"
-                           value="${requestScope.searchValue}" maxlength="50">
+                           value="${requestScope.searchValue}" maxlength="50">.
                     <input type="submit" value="搜 索" class="searchBtn">
                 </div>
             </form>
@@ -120,7 +121,7 @@
                 <c:forEach items="${requestScope.orderItemList}" var="orderItem">
                     <tr class="orderItem_category">
                         <td colspan="6"><span ></span><span
-                                class="category_shop">店铺：贤趣${orderItem.productOrderItemProduct.productCategory.categoryName}旗舰店</span>
+                                class="category_shop">店铺：贤趣${orderItem.product.category.categoryName}旗舰店</span>
                         </td>
                     </tr>
                     <tr class="orderItem_info">
@@ -129,9 +130,9 @@
                                                           name="orderItem_id"><label
                                 for="cbx_orderItem_select_${orderItem.productOrderItemId}"></label></td>
                         <td><img class="orderItem_product_image"
-                                 src="${ctx}/res/images/item/productSinglePicture/${orderItem.productOrderItemProduct.singleProductImageList[0].productImageSrc}"
+                                 src="${ctx}/res/images/item/productSinglePicture/${orderItem.product.singleProductImageList[0].productimageSrc}"
                                  style="width: 80px;height: 80px;"/><span class="orderItem_product_name"><a
-                                href="${ctx}/product/${orderItem.productOrderItemProduct.productId}">${orderItem.productOrderItemProduct.productName}</a></span>
+                                href="${ctx}/product/${orderItem.product.productId}">${orderItem.product.productName}</a></span>
                         </td>
                         <td><span
                                 class="orderItem_product_price">￥${orderItem.productOrderItemPrice/orderItem.productOrderItemNumber}</span>

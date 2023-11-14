@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.ProductorderitemMapper">
+    <insert id="insertProductorderitem">
+        INSERT INTO productorderitem (productOrderItemNumber, productOrderItemPrice, productOrderItemProductId,
+                                      productOrderItemOrderId, productOrderItemUserId, productOrderItemUserMessage)
+        VALUES (#{productOrderItemNumber}, #{productOrderItemPrice}, #{productOrderItemProductId},
+                #{productOrderItemOrderId}, #{productOrderItemUserId}, #{productOrderItemUserMessage})
+    </insert>
+    <delete id="deleteProductorderitemByProductorderitemOrderId">
+        DELETE
+        FROM productorderitem
+        WHERE productorderitemOrderId = #{productorderItemOrderId}
+    </delete>
+    <select id="selectProductorderitemByProductorderitemOrderId"
+            resultType="com.seqq.springboot_mall.entity.Productorderitem">
+        SELECT *
+        FROM productorderitem
+        WHERE productorderitemOrderId = #{productorderitemOrderId}
+    </select>
+    <select id="selectProductorderitemsByProductorderitemUserId"
+            resultType="com.seqq.springboot_mall.entity.Productorderitem">
+        SELECT *
+        FROM productorderitem
+        WHERE productorderitemUserId = #{productorderitemUserId}
+    </select>
+    <select id="selectProductorderitemsByProductorderitemId"
+            resultType="com.seqq.springboot_mall.entity.Productorderitem">
+        SELECT *
+        FROM productorderitem
+        WHERE productorderitemId = #{productorderitemId}
+    </select>
+    <select id="selectProductorderitemNumberSumBypProductId" resultType="java.lang.Integer">
+        SELECT SUM(productorderitem.productorderitemNumber) AS productSaleCount
+        FROM productorderitem
+        WHERE productorderitem.productorderitemProductId = #{productId}
+    </select>
+</mapper>

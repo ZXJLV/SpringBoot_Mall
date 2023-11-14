@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.ProductMapper">
+    <select id="selectProductCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM product
+    </select>
+    <select id="selectProductByProductId" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT *
+        FROM product
+        WHERE productId BETWEEN 42 AND 47
+    </select>
+    <select id="selectProductAll" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT *
+        FROM product
+        WHERE productCategoryId = #{productCategoryId}
+    </select>
+    <select id="selectProductByProductorderitemProductId" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT *
+        FROM product
+        WHERE productId = #{productId}
+    </select>
+    <select id="selectProductAndReviewByProductId" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT product.*, review.reviewContent AS productReviewCount, review.reviewCreatedate
+        FROM product
+                 LEFT JOIN review ON review.reviewProductId = product.productId
+        WHERE product.productId = #{productId}
+    </select>
+    <select id="selectProductAndCategoryByProductId" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT product.*, category.*
+        FROM product
+                 INNER JOIN category ON product.productCategoryId = category.categoryId
+        WHERE productId = #{productId}
+    </select>
+    <select id="selectProductAll2" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT * FROM product WHERE product.productId != #{productId};
+    </select>
+    <select id="selectProductByProductName" resultType="com.seqq.springboot_mall.entity.Product">
+        SELECT * FROM product WHERE product.productName LIKE CONCAT('%',#{productName},'%');
+    </select>
+
+</mapper>

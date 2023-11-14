@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.ProductimageMapper">
+    <select id="selectProductimageAll" resultType="com.seqq.springboot_mall.entity.Productimage">
+        SELECT * FROM productimage WHERE productimageProductId = #{productimageProductId} AND productimageType = 0
+    </select>
+    <select id="selectProductimageAll2" resultType="com.seqq.springboot_mall.entity.Productimage">
+        SELECT * FROM productimage WHERE productimageProductId = #{productimageProductId} AND productimageType = 1
+    </select>
+</mapper>

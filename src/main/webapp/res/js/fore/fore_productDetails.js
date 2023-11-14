@@ -107,12 +107,12 @@ $(function () {
         if (yn) {
             $.ajax({
                 type: "POST",
-                url: contextPath+"/login/doLogin",
+                url: contextPath+"/foreLogin",
                 data: {"username": $.trim($("#name").val()), "password": $.trim($("#password").val())},
                 dataType: "json",
                 success: function (data) {
                     $(".loginButton").val("登 录");
-                    if (data.success) {
+                    if (data!=null) {
                         location.reload();
                     } else {
                         styleUtil.errorShow($("#error_message_p"), "用户名和密码错误！");

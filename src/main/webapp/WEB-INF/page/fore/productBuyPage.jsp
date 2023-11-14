@@ -70,16 +70,16 @@
         </select>
         <div class="br"></div>
         <label for="textarea_details_address" id="label_details_address">详细地址</label><span class="mustValue">*</span>
-        <textarea id="textarea_details_address">${requestScope.detailsAddress}</textarea>
+        <textarea id="textarea_details_address">${requestScope.productorder.productOrderDetailAddress}</textarea>
         <div class="br"></div>
         <label for="input_order_post" style="min-width: 80px;" id="label_order_post">邮政编码</label><span></span>
-        <input id="input_order_post" type="text" value="${requestScope.order_post}" maxlength="6"/>
+        <input id="input_order_post" type="text" value="${requestScope.productorder.productOrderPost}" maxlength="6"/>
         <div class="br"></div>
         <label for="input_order_receiver" id="label_order_receiver">收货人姓名</label><span class="mustValue">*</span>
-        <input id="input_order_receiver" type="text" value="${requestScope.order_receiver}" maxlength="20"/>
+        <input id="input_order_receiver" type="text" value="${requestScope.productorder.productOrderReceiver}" maxlength="20"/>
         <div class="br"></div>
         <label for="input_order_phone" id="label_order_phone">手机号码</label><span class="mustValue">*</span>
-        <input id="input_order_phone" type="text" value="${requestScope.order_phone}" maxlength="11"/>
+        <input id="input_order_phone" type="text" value="${requestScope.productorder.productOrderMobile}" maxlength="11"/>
     </div>
     <div class="order_info">
         <h2>确认订单信息</h2>
@@ -96,7 +96,7 @@
             <c:forEach items="${requestScope.orderItemList}" var="orderItem" varStatus="i">
                 <tr class="tr_shop">
                     <td><span class="span_shopTitle">店铺：</span><span
-                            class="span_shopName">贤趣${orderItem.productOrderItemProduct.productCategory.categoryName}旗舰店</span>
+                            class="span_shopName">贤趣${orderItem.product.category.categoryName}旗舰店</span>
                     </td>
                     <td></td>
                     <td></td>
@@ -104,12 +104,12 @@
                 </tr>
                 <tr class="tr_product_info">
                     <td><img
-                            src="${ctx}/res/images/item/productSinglePicture/${orderItem.productOrderItemProduct.singleProductImageList[0].productImageSrc}"
+                            src="${ctx}/res/images/item/productSinglePicture/${orderItem.product.singleProductImageList[0].productimageSrc}"
                             style="width: 50px;height: 50px;"/><span class="span_product_name"><a
-                            href="${ctx}/product/${orderItem.productOrderItemProduct.productId}">${orderItem.productOrderItemProduct.productName}</a></span>
+                            href="${ctx}/product/${orderItem.product.productId}">${orderItem.product.productName}</a></span>
                     </td>
                     <td><span
-                            class="span_product_sale_price">${orderItem.productOrderItemProduct.productSalePrice}0</span>
+                            class="span_product_sale_price">${orderItem.product.productSalePrice}0</span>
                     </td>
                     <td><span class="span_productOrderItem_number">${orderItem.productOrderItemNumber}</span></td>
                     <td><span class="span_productOrderItem_price">${orderItem.productOrderItemPrice}0</span></td>
@@ -164,7 +164,7 @@
             var productOrderReceiver = $.trim($("#input_order_receiver").val());
             var productOrderMobile = $.trim($("#input_order_phone").val());
             var userMessage = $.trim($("#input_userMessage_1").val());
-            var orderItem_product_id = parseInt('${requestScope.orderItemList[0].productOrderItemProduct.productId}');
+            var orderItem_product_id = parseInt('${requestScope.orderItemList[0].product.productId}');
             var orderItem_number = parseInt('${requestScope.orderItemList[0].productOrderItemNumber}');
 debugger;
             var yn = true;
@@ -190,10 +190,14 @@ debugger;
                 window.scrollTo(0, 0);
                 return false;
             }
+            console.log("payOne payOne payOne payOne payOne")
+            let userId = ${sessionScope.user.userId};
+            console.log("userId:"+userId);
             $.ajax({
-                url: "/mall/order",
+                url: "${ctx}/createOrder",
                 type: "POST",
                 data: {
+                    "userId": userId,
                     "addressId": addressId,
                     "cityAddressId": cityAddressId,
                     "districtAddressId": districtAddressId,
@@ -207,8 +211,8 @@ debugger;
                 },
                 dataType: "json",
                 success: function (data) {
-                    if (data.success) {
-                        location.href = "/mall" + data.url;
+                    if (data!=null) {
+                        location.href = "${ctx}"+data;
                     } else {
                         alert("订单创建失败，请稍后再试！");
                         location.reload(true);
@@ -224,84 +228,87 @@ debugger;
             });
         }
 
-        function payList() {
-            var addressId = $("#select_order_address_province").val();
-            var cityAddressId = $("#select_order_address_city").val();
-            var districtAddressId = $("#select_order_address_district").val();
-            var productOrderDetailAddress = $.trim($("#textarea_details_address").val());
-            var productOrderPost = $.trim($("#input_order_post").val());
-            var productOrderReceiver = $.trim($("#input_order_receiver").val());
-            var productOrderMobile = $.trim($("#input_order_phone").val());
-            debugger;
-            var yn = true;
-            if (productOrderDetailAddress === "") {
-                styleUtil.specialBasicErrorShow($("#label_details_address"));
-                yn = false;
-            }
-            if (productOrderReceiver === "") {
-                styleUtil.specialBasicErrorShow($("#label_order_receiver"));
-                yn = false;
-            }
-            var re = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
-            if (!re.test(productOrderMobile)) {
-                styleUtil.specialBasicErrorShow($("#label_order_phone"));
-                yn = false;
-            }
-            re = /^[1-9][0-9]{5}$/;
-            if (!re.test(productOrderPost) && productOrderPost !== "") {
-                styleUtil.specialBasicErrorShow($("#label_order_post"));
-                yn = false;
-            }
-            if (!yn) {
-                window.scrollTo(0, 0);
-                return false;
-            }
-            var orderItemMap = {};
-            var tr = $(".tr_userMessage");
-            tr.each(function () {
-                var orderItem_id = $(this).find(".input_orderItem_id").val();
-                if (isNaN(orderItem_id) || orderItem_id === "") {
-                    location.reload(true);
-                    return false;
-                }
-                orderItemMap[orderItem_id] = $(this).find(".input_userMessage").val();
-            });
-            $.ajax({
-                url: "/mall/order/list",
-                type: "POST",
-                data: {
-                    "addressId": addressId,
-                    "cityAddressId": cityAddressId,
-                    "districtAddressId": districtAddressId,
-                    "productOrderDetailAddress": productOrderDetailAddress,
-                    "productOrderPost": productOrderPost,
-                    "productOrderReceiver": productOrderReceiver,
-                    "productOrderMobile": productOrderMobile,
-                    "orderItemJSON": JSON.stringify(orderItemMap)
-                },
-                traditional: true,
-                success: function (data) {
-                    if (data.success) {
-                        location.href = "/mall" + data.url;
-                        return true;
-                    } else {
-                        alert("订单创建失败，请稍后再试！");
-                        location.reload(true);
-                    }
-                },
-                beforeSend: function () {
-                },
-                error: function () {
-                    alert("订单创建失败，请稍后再试！");
-                    location.reload(true);
-                }
-            });
-        }
+        // function payList() {
+        //     console.log("payList payList payList payList payList")
+        //
+        //     var addressId = $("#select_order_address_province").val();
+        //     var cityAddressId = $("#select_order_address_city").val();
+        //     var districtAddressId = $("#select_order_address_district").val();
+        //     var productOrderDetailAddress = $.trim($("#textarea_details_address").val());
+        //     var productOrderPost = $.trim($("#input_order_post").val());
+        //     var productOrderReceiver = $.trim($("#input_order_receiver").val());
+        //     var productOrderMobile = $.trim($("#input_order_phone").val());
+        //     debugger;
+        //     var yn = true;
+        //     if (productOrderDetailAddress === "") {
+        //         styleUtil.specialBasicErrorShow($("#label_details_address"));
+        //         yn = false;
+        //     }
+        //     if (productOrderReceiver === "") {
+        //         styleUtil.specialBasicErrorShow($("#label_order_receiver"));
+        //         yn = false;
+        //     }
+        //     var re = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+        //     if (!re.test(productOrderMobile)) {
+        //         styleUtil.specialBasicErrorShow($("#label_order_phone"));
+        //         yn = false;
+        //     }
+        //     re = /^[1-9][0-9]{5}$/;
+        //     if (!re.test(productOrderPost) && productOrderPost !== "") {
+        //         styleUtil.specialBasicErrorShow($("#label_order_post"));
+        //         yn = false;
+        //     }
+        //     if (!yn) {
+        //         window.scrollTo(0, 0);
+        //         return false;
+        //     }
+        //     var orderItemMap = {};
+        //     var tr = $(".tr_userMessage");
+        //     tr.each(function () {
+        //         var orderItem_id = $(this).find(".input_orderItem_id").val();
+        //         if (isNaN(orderItem_id) || orderItem_id === "") {
+        //             location.reload(true);
+        //             return false;
+        //         }
+        //         orderItemMap[orderItem_id] = $(this).find(".input_userMessage").val();
+        //     });
+        //     $.ajax({
+        //         url: "/mall/order/list",
+        //         type: "POST",
+        //         data: {
+        //             "addressId": addressId,
+        //             "cityAddressId": cityAddressId,
+        //             "districtAddressId": districtAddressId,
+        //             "productOrderDetailAddress": productOrderDetailAddress,
+        //             "productOrderPost": productOrderPost,
+        //             "productOrderReceiver": productOrderReceiver,
+        //             "productOrderMobile": productOrderMobile,
+        //             "orderItemJSON": JSON.stringify(orderItemMap)
+        //         },
+        //         traditional: true,
+        //         success: function (data) {
+        //             if (data.success) {
+        //                 location.href = "/mall" + data.url;
+        //                 return true;
+        //             } else {
+        //                 alert("订单创建失败，请稍后再试！");
+        //                 location.reload(true);
+        //             }
+        //         },
+        //         beforeSend: function () {
+        //         },
+        //         error: function () {
+        //             alert("订单创建失败，请稍后再试！");
+        //             location.reload(true);
+        //         }
+        //     });
+        // }
     </script>
     <div class="order_info_last">
         <c:choose>
             <c:when test="${requestScope.orderItemList[0].productOrderItemId != null}">
-                <a href="javascript:void(0)" title="提交订单" class="go-btn" onclick="payList()">提交订单</a>
+<%--                <a href="javascript:void(0)" title="提交订单" class="go-btn" onclick="payList()">提交订单</a>--%>
+                <a href="javascript:void(0)" title="提交订单" class="go-btn" onclick="payOne()">提交订单</a>
             </c:when>
             <c:otherwise>
                 <a href="javascript:void(0)" title="提交订单" class="go-btn" onclick="payOne()">提交订单</a>

@@ -54,7 +54,6 @@ $(function () {
                 console.log(data)
                 $("#btn_login").val("登录");
                 if (data.success) {
-                    console.log(123123132112312)
                     cookieUtil.setCookie("adminName", adminName, 30);
                     location.href = contextPath + "/goHome";
                 } else {

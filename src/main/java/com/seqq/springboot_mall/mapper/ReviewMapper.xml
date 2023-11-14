@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.ReviewMapper">
+    <insert id="insertReview">
+        INSERT INTO review (reviewContent, reviewCreatedate, reviewUserId, reviewProductId, reviewOrderItemId)
+        VALUES (#{reviewContent}, #{reviewCreatedate}, #{reviewUserId}, #{reviewProductId}, #{reviewOrderItemId})
+    </insert>
+    <select id="selectReviewByReviewOrderItemId" resultType="com.seqq.springboot_mall.entity.Review">
+        SELECT *
+        FROM review
+        WHERE reviewOrderItemId = #{reviewOrderItemId}
+    </select>
+    <select id="selectReviewCountByProductId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM review WHERE review.reviewProductId = #{productId}
+    </select>
+    <select id="selectReviewByProductId" resultType="com.seqq.springboot_mall.entity.Review">
+        SELECT *
+        FROM review
+        WHERE reviewProductId = #{productId}
+    </select>
+</mapper>

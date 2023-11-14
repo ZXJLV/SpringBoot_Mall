@@ -37,8 +37,8 @@
                         <li>
                             <span class="review_msg">认真填写商品评价，就有机会获得20点Mall达人经验值！</span>
                             <a class="J_makePoint"
-                               href="${ctx}/review/${requestScope.orderItem.productOrderItemId}">
-                                <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productImageSrc}"
+                               href="${ctx}/getReview/${requestScope.productorderitem.productOrderItemId}">
+                                <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productimageSrc}"
                                      width="100px" height="100px"/>
                                 <p class="productName"
                                    title="${requestScope.product.productName}">${requestScope.product.productName}</p>
@@ -48,7 +48,7 @@
                     </ul>
                 </div>
             </c:if>
-            <p>您可以查看：<a href="${ctx}/order/0/10">已买到的宝贝</a></p>
+            <p>您可以查看：<a href="${ctx}/order/${sessionScope.user.userId}">已买到的宝贝</a></p>
         </div>
     </div>
 </div>

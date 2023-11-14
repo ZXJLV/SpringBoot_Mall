@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.AddressMapper">
+    <select id="selectAddress" resultType="com.seqq.springboot_mall.entity.Address">
+        SELECT * FROM address WHERE RIGHT(addressAreaId, 4) = '0000'
+    </select>
+    <select id="selectAddressByAddressRegionId" resultType="com.seqq.springboot_mall.entity.Address">
+        SELECT * FROM address WHERE addressRegionId = #{addressRegionId} AND addressAreaId != #{addressRegionId};
+    </select>
+    <select id="selectAddressAll" resultType="com.seqq.springboot_mall.entity.Address">
+        SELECT * FROM address
+    </select>
+    <select id="selectAddressByAddressAreaId" resultType="com.seqq.springboot_mall.entity.Address">
+        SELECT * FROM address WHERE address.addressAreaId = #{addressAreaId}
+    </select>
+</mapper>

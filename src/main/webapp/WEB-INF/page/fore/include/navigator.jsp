@@ -17,32 +17,33 @@
     <div class="nav_main">
         <p id="container_login">
             <c:choose>
-                <c:when test="${requestScope.user.userName==null}">
+                <c:when test="${sessionScope.user.userName==null}">
                     <em>嗨！欢迎来到Mall商城</em>
-                    <a href="${ctx}/login">登录</a>
-                    <a href="${ctx}/register">注册</a>
+                    <a href="${ctx}/foreQuit">登录</a>
+                    <a href="${ctx}/toRegister">注册</a>
                 </c:when>
                 <c:otherwise>
                     <em>Hi，</em>
-                    <a href="${ctx}/userDetails" class="userName"
-                       target="_blank">${requestScope.user.userName}</a>
-                    <a href="${ctx}/login/logout">退出</a>
+                    <a href="${ctx}/toUserDetails" class="userName"
+                       target="_blank">${sessionScope.user.userName}</a>
+                    <a href="${ctx}/foreQuit">退出</a>
                 </c:otherwise>
             </c:choose>
         </p>
         <ul class="quick_li">
             <li class="quick_li_MyTaobao">
                 <div class="sn_menu">
-                    <a href="${ctx}/userDetails">我的Mall<b></b></a>
+                    <a href="${ctx}/toUserDetails">我的Mall<b></b></a>
                     <div class="quick_menu">
-                        <a href="${ctx}/order/0/10">已买到的宝贝</a>
+<%--                        <a href="${ctx}/order/0/10">已买到的宝贝</a>--%>
+                        <a href="${ctx}/order/${sessionScope.user.userId}">已买到的宝贝</a>
                         <a href="#">已卖出的宝贝</a>
                     </div>
                 </div>
             </li>
             <li class="quick_li_cart">
                 <img src="${ctx}/res/images/fore/WebsiteImage/buyCar.png">
-                <a href="${ctx}/cart">购物车</a>
+                <a href="${ctx}/cart/${sessionScope.user.userId}">购物车</a>
             </li>
             <li class="quick_li_menuItem">
                 <div class="sn_menu">

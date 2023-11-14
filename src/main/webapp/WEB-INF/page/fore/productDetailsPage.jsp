@@ -16,8 +16,8 @@
     <div class="header">
         <a href="${ctx}"><img
                 src="${ctx}/res/images/fore/WebsiteImage/tmallLogoD.png"></a>
-        <span class="shopNameHeader">贤趣${requestScope.product.productCategory.categoryName}官方旗舰店</span>
-        <input id="tid" type="hidden" value="${requestScope.product.productCategory.categoryId}"/>
+        <span class="shopNameHeader">贤趣${requestScope.product.category.categoryName}官方旗舰店</span>
+        <input id="tid" type="hidden" value="${requestScope.product.category.categoryId}"/>
         <img src="${ctx}/res/images/fore/WebsiteImage/detailsHeaderA.png"
              class="shopAssessHeader">
         <div class="shopSearchHeader">
@@ -97,23 +97,23 @@
     </div>
 </div>
 <div class="shopImg">
-    <img src="${ctx}/res/images/item/categoryPicture/${requestScope.product.productCategory.categoryImageSrc}">
+    <img src="${ctx}/res/images/item/categoryPicture/${requestScope.product.category.categoryImageSrc}">
 </div>
 <div class="context">
     <div class="context_left">
         <div class="context_img_ks">
-            <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productImageSrc}"
+            <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productimageSrc}"
                  width="800px" height="800px">
         </div>
         <div class="context_img">
-            <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productImageSrc}"
+            <img src="${ctx}/res/images/item/productSinglePicture/${requestScope.product.singleProductImageList[0].productimageSrc}"
                  class="context_img_main" width="400px" height="400px"/>
             <div class="context_img_winSelector"></div>
         </div>
         <ul class="context_img_ul">
             <c:forEach var="img" items="${requestScope.product.singleProductImageList}">
                 <li class="context_img_li"><img
-                        src="${ctx}/res/images/item/productSinglePicture/${img.productImageSrc}"/>
+                        src="${ctx}/res/images/item/productSinglePicture/${img.productimageSrc}"/>
                 </li>
             </c:forEach>
         </ul>
@@ -168,7 +168,7 @@
                 $(function () {
                     //点击购买按钮时
                     $(".context_buy_form").submit(function () {
-                        if ('${sessionScope.userId}' === "") {
+                        if ('${sessionScope.user.userId}' === "") {
                             $(".loginModel").show();
                             $(".loginDiv").show();
                             return false;
@@ -177,7 +177,7 @@
                         if (number) {
                             location.reload();
                         } else {
-                            location.href = "${ctx}/order/create/${requestScope.product.productId}?product_number=" + $.trim($(".context_buymember").val());
+                            location.href = "${ctx}/create/${requestScope.product.productId}/${sessionScope.user.userId}?product_number=" + $.trim($(".context_buymember").val());
                         }
                         return false;
                     });
@@ -250,15 +250,15 @@
                 <c:forEach items="${requestScope.loveProductList}" var="product">
                     <li class="context_ul_main">
                         <div class="context_ul_img">
-                            <a href="/mall/product/${product.productId}">
-                                <img src="${ctx}/res/images/item/productSinglePicture/${product.singleProductImageList[0].productImageSrc}">
+                            <a href="/product/${product.productId}">
+                                <img src="${ctx}/res/images/item/productSinglePicture/${product.singleProductImageList[0].productimageSrc}">
                             </a>
                             <p>¥${product.productSalePrice}0</p>
                         </div>
                     </li>
                 </c:forEach>
             </ul>
-            <input type="hidden" id="guessNumber" value="${requestScope.guessNumber}">
+<%--            <input type="hidden" id="guessNumber" value="${requestScope.guessNumber}">--%>
         </div>
         <ul class="context_ul_trigger">
             <li class="ul_trigger_up"><a href="#"></a></li>
@@ -284,7 +284,7 @@
     </div>
     <div class="J_img">
         <c:forEach items="${requestScope.product.detailProductImageList}" var="image">
-            <img src="${ctx}/res/images/item/productDetailsPicture/${image.productImageSrc}"/>
+            <img src="${ctx}/res/images/item/productDetailsPicture/${image.productimageSrc}"/>
         </c:forEach>
     </div>
 </div>

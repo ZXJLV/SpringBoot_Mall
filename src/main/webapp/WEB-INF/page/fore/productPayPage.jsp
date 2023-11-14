@@ -25,10 +25,10 @@
         <c:choose>
             <c:when test="${fn:length(requestScope.productOrder.productOrderItemList)==1}">
                 <div class="order_name">
-                    <span>Mall商城 -- ${requestScope.productOrder.productOrderItemList[0].productOrderItemProduct.productName}</span>
+                    <span>Mall商城 -- ${requestScope.productOrder.productOrderItemList[0].product.productName}</span>
                 </div>
                 <div class="order_shop_name">
-                    <span>卖家昵称：Mall${requestScope.productOrder.productOrderItemList[0].productOrderItemProduct.productCategory.categoryName}旗舰店</span>
+                    <span>卖家昵称：Mall${requestScope.productOrder.productOrderItemList[0].product.category.categoryName}旗舰店</span>
                 </div>
             </c:when>
             <c:otherwise>
@@ -42,26 +42,28 @@
             <span class="price_unit">元</span>
         </div>
     </div>
+    <input type="hidden" value="${sessionScope.user.userId}" id="userId">
     <div class="order_pay_div">
         <script>
+            let userId = $("#userId").val();
             function pay() {
                 $.ajax({
-                    url: "${ctx}/order/pay/${requestScope.productOrder.productOrderCode}",
+                    url: "${ctx}/doPay/${requestScope.productOrder.productOrderCode}",
                     type: "PUT",
                     data: null,
                     dataType: "json",
                     success: function (data) {
-                        if (data.success !== true) {
+                        if (data === null) {
                             alert("订单处理异常，请稍候再试！");
                         }
-                        location.href = "/mall" + data.url;
+                        location.href = "/toSuccessPage";
                     },
                     beforeSend: function () {
 
                     },
                     error: function () {
                         alert("订单支付出现问题，请重新支付！");
-                        location.href = "/mall/order/0/10";
+                        location.href = "/mall/order/" + userId;
                     }
                 });
             }

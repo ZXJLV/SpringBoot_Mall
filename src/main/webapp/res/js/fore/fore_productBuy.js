@@ -7,22 +7,22 @@ $(function () {
     $('#select_order_address_province').change(function () {
         $.ajax({
             type: "GET",
-            url: contextPath+"/address/" + $(this).val(),
+            url: contextPath+"/orderAddress/" + $(this).val(),
             data: null,
             dataType: "json",
             success: function (data) {
                 $(".loader").hide();
-                if (data.success) {
+                if (data!=null) {
                     $("#select_order_address_city").empty();
                     $("#select_order_address_district").empty();
-                    for (var i = 0; i < data.addressList.length; i++) {
-                        var address_id = data.addressList[i].addressAreaId;
-                        var addressName = data.addressList[i].addressName;
+                    for (var i = 0; i < data.cityList.length; i++) {
+                        var address_id = data.cityList[i].addressAreaId;
+                        var addressName = data.cityList[i].addressName;
                         $("#select_order_address_city").append("<option value='" + address_id + "'>" + addressName + "</option>")
                     }
-                    for (var j = 0; j < data.childAddressList.length; j++) {
-                        var childAddress_id = data.childAddressList[j].addressAreaId;
-                        var childAddress_name = data.childAddressList[j].addressName;
+                    for (var j = 0; j < data.districtList.length; j++) {
+                        var childAddress_id = data.districtList[j].addressAreaId;
+                        var childAddress_name = data.districtList[j].addressName;
                         $("#select_order_address_district").append("<option value='" + childAddress_id + "'>" + childAddress_name + "</option>")
                     }
                     $('#select_order_address_city').selectpicker('refresh');
@@ -45,16 +45,16 @@ $(function () {
     $("#select_order_address_city").change(function () {
         $.ajax({
             type: "GET",
-            url: contextPath+"/address/" + $(this).val(),
+            url: contextPath+"/orderAddress/" + $(this).val(),
             data: null,
             dataType: "json",
             success: function (data) {
                 $(".loader").hide();
-                if (data.success) {
+                if (data!=null) {
                     $("#select_order_address_district").empty();
-                    for (var i = 0; i < data.addressList.length; i++) {
-                        var address_id = data.addressList[i].addressAreaId;
-                        var addressName = data.addressList[i].addressName;
+                    for (var i = 0; i < data.cityList.length; i++) {
+                        var address_id = data.cityList[i].addressAreaId;
+                        var addressName = data.cityList[i].addressName;
                         $("#select_order_address_district").append("<option value='" + address_id + "'>" + addressName + "</option>")
                     }
                     $('#select_order_address_district').selectpicker('refresh');

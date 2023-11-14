@@ -129,8 +129,8 @@ function sumPrice() {
     }
     $("#J_SelectedItemsCount").text(obj.length);
 }
-
 function create(obj) {
+    let userId = $("#userId").val()
     obj = $(obj);
     if (!obj.hasClass("selected")) {
         return true;
@@ -149,8 +149,8 @@ function create(obj) {
         },
         traditional: true,
         success: function (data) {
-            if (data.success) {
-                location.href = contextPath + "/order/create/byCart?order_item_list=" + data.orderItemIDArray;
+            if (data!=null) {
+                location.href = contextPath + "/byCart/"+userId+"/" + data;
                 return true;
             } else {
                 alert("购物车商品结算异常，请稍候再试！");

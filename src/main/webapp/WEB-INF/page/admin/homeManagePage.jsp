@@ -9,7 +9,7 @@
     <script>
         var myChart;
         $(function () {
-            $.getJSON('/mall/res/js/basicTheme.json', function (themeJSON) {
+            $.getJSON(contextPath+'/res/js/basicTheme.json', function (themeJSON) {
                 echarts.registerTheme('basicTheme', themeJSON);
                 // 基于准备好的dom，初始化eCharts实例
                 myChart = echarts.init($("#chartDiv")[0], "basicTheme");
@@ -130,7 +130,7 @@
         function getChartData(beginDate, endDate, jsonObject) {
             if (jsonObject == null) {
                 $.ajax({
-                    url: "/mall/admin/home/charts",
+                    url: "/selectProductordersByDate",
                     type: "get",
                     data: {"beginDate": beginDate, "endDate": endDate},
                     dataType: "json",
@@ -140,7 +140,7 @@
                         //异步加载数据
                         myChart.setOption({
                             xAxis: {
-                                data: data.dateStr
+                                data: data.dateMap
                             },
                             series: [{
                                 name: "总交易额",
@@ -169,7 +169,7 @@
                 //异步加载数据
                 myChart.setOption({
                     xAxis: {
-                        data: jsonObject.dateStr
+                        data: jsonObject.dateMap
                     },
                     series: [{
                         name: "总交易额",
@@ -339,19 +339,19 @@
     <li id="productTotal">
         <p class="chartTotalTitle"><span class="chartTitleText">上架产品数量</span><span class="chartTitleUnit">(单位：件)</span>
         </p>
-        <span class="chartTotalValue">${requestScope.productTotal}</span>
+        <span class="chartTotalValue">${requestScope.productCount}</span>
         <div class="chartTotalStyle" style="background-color: #f89e9e"></div>
     </li>
     <li id="userTotal">
         <p class="chartTotalTitle"><span class="chartTitleText">注册用户数量</span><span class="chartTitleUnit">(单位：人)</span>
         </p>
-        <span class="chartTotalValue">${requestScope.userTotal}</span>
+        <span class="chartTotalValue">${requestScope.userCount}</span>
         <div class="chartTotalStyle" style="background-color: #9ea7f5"></div>
     </li>
     <li id="orderTotal">
         <p class="chartTotalTitle"><span class="chartTitleText">成交订单数量</span><span class="chartTitleUnit">(单位：件)</span>
         </p>
-        <span class="chartTotalValue">${requestScope.orderTotal}</span>
+        <span class="chartTotalValue">${requestScope.productordersSucceedCount}</span>
         <div class="chartTotalStyle" style="background-color: #ffdea4"></div>
     </li>
 </ul>

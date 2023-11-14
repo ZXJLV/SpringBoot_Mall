@@ -69,7 +69,7 @@
             <div class="loginLinks">
                 <a href="#">忘记密码</a>
                 <a href="#">忘记会员名</a>
-                <a href="${ctx}/register">免费注册</a>
+                <a href="${ctx}/toRegister">免费注册</a>
             </div>
             <div class="error_message">
                 <p id="error_message_p"></p>

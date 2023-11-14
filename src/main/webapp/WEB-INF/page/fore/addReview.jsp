@@ -44,17 +44,17 @@
 <div class="content">
     <div class="details_box">
         <div class="db-showpanel">
-            <a href="${ctx}/product/${orderItem.productOrderItemProduct.productId}"
+            <a href="${ctx}/product/${requestScope.productorderitem.product.productId}"
                target="_blank"><img
-                    src="${ctx}/res/images/item/productSinglePicture/${orderItem.productOrderItemProduct.singleProductImageList[0].productImageSrc}"></a>
+                    src="${ctx}/res/images/item/productSinglePicture/${requestScope.productorderitem.product.singleProductImageList[0].productimageSrc}"></a>
         </div>
         <div class="db-icbu">
             <ol class="ui-form-bd">
-                <li class="ui-form-row"><h3>${orderItem.productOrderItemProduct.productName}</h3></li>
+                <li class="ui-form-row"><h3>${requestScope.productorderitem.product.productName}</h3></li>
                 <li class="ui-form-row superstar-price">
                     <label class="ui-form-label">价格</label>
                     <div class="ui-form_right">
-                        <em>${orderItem.productOrderItemProduct.productSalePrice}</em>
+                        <em>${requestScope.productorderitem.product.productSalePrice}</em>
                         <span>元</span>
                     </div>
                 </li>
@@ -69,7 +69,7 @@
                 <div class="tv-lb-head"></div>
                 <div class="tv-lb-content">
                     <span>累计评价</span>
-                    <em class="superstar-ratetotal">${orderItem.productOrderItemProduct.productReviewCount}</em>
+                    <em class="superstar-ratetotal">${requestScope.productorderitem.product.productReviewCount}</em>
                 </div>
                 <div class="tv-lb-bottom"></div>
             </div>
@@ -80,7 +80,8 @@
         </div>
         <div class="rate-compose">
             <form method="post" action="${ctx}/review" id="review_form">
-                <input type="hidden" class="orderItem_id" value="${orderItem.productOrderItemId}" name="orderItem_id">
+                <input type="hidden" class="orderItem_id" value="${requestScope.productorderitem.productOrderItemId}" name="orderItem_id" id="productOrderItemId">
+                <input type="hidden" value="${requestScope.productorderitem.product.productId}" id="reviewProductId">
                 <div class="compose-main">
                     <div class="compose-header">
                         <span>其他买家，需要你的建议哦！</span>
@@ -93,12 +94,54 @@
                     </div>
                 </div>
                 <div class="compose-submit">
-                    <input type="submit" value="提交评价"/>
+                    <input type="button" value="提交评价" id="submit"/>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<input type="hidden" value="${sessionScope.user.userId}" id="userId">
 <%@include file="include/footer_two.jsp" %>
 <%@include file="include/footer.jsp" %>
 </body>
+<script src="${ctx}/res/js/jquery-color-2.1.2.js"></script>
+<script>
+    console.log("js")
+
+    $(document).ready(function () {
+
+        $("#submit").click(function () {
+            let reviewContent = $("#text-review").val()
+            let productOrderItemId = $("#productOrderItemId").val()
+            let reviewUserId = $("#userId").val()
+            let reviewProductId = $("#reviewProductId").val()
+            console.log("reviewContent:"+reviewContent)
+            console.log("productOrderItemId:"+productOrderItemId)
+            console.log("reviewUserId:"+reviewUserId)
+            console.log("reviewProductId:"+reviewProductId)
+
+            $.ajax({
+                type: "POST",
+                url: contextPath + "/addReview",
+                data: {
+                    "reviewContent": reviewContent,
+                    "productOrderItemId": productOrderItemId,
+                    "reviewUserId": reviewUserId,
+                    "reviewProductId": reviewProductId,
+                },
+                dataType: "json",
+                success: function () {
+
+                }
+            })
+        })
+
+
+
+
+
+
+    })
+
+
+</script>

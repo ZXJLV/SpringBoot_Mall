@@ -37,21 +37,21 @@
                 <div class="step-name">拍下商品</div>
                 <div class="step-no_first"></div>
                 <div class="step-time">
-                    <div class="step-time-wraper">${productOrder.productOrderPayDate}</div>
+                    <div class="step-time-wraper">${requestScope.productOrder.productOrderPayDate}</div>
                 </div>
             </li>
             <li class="step-done">
                 <div class="step-name">付款到支付宝</div>
                 <div class="step-no step-no-select"></div>
                 <div class="step-time">
-                    <div class="step-time-wraper">${productOrder.productOrderPayDate}</div>
+                    <div class="step-time-wraper">${requestScope.productOrder.productOrderPayDate}</div>
                 </div>
             </li>
             <li class="step-done">
                 <div class="step-name">卖家发货</div>
                 <div class="step-no step-no-select"></div>
                 <div class="step-time">
-                    <div class="step-time-wraper">${productOrder.productOrderDeliveryDate}</div>
+                    <div class="step-time-wraper">${requestScope.productOrder.productOrderDeliveryDate}</div>
                 </div>
             </li>
             <li class="step-no">
@@ -82,13 +82,13 @@
             <c:forEach items="${requestScope.productOrder.productOrderItemList}" var="orderItem" varStatus="i">
                 <tr class="tr_product_info">
                     <td width="500px"><img
-                            src="${ctx}/res/images/item/productSinglePicture/${orderItem.productOrderItemProduct.singleProductImageList[0].productImageSrc}"
+                            src="${ctx}/res/images/item/productSinglePicture/${orderItem.productimageList[0].productimageSrc}"
                             style="width: 50px;height: 50px;"/><span class="span_product_name"><a
-                            href="${ctx}/product/${orderItem.productOrderItemProduct.productId}"
-                            target="_blank">${orderItem.productOrderItemProduct.productName}</a></span>
+                            href="${ctx}/product/${orderItem.product.productId}"
+                            target="_blank">${orderItem.product.productName}</a></span>
                     </td>
                     <td><span
-                            class="span_product_sale_price">${orderItem.productOrderItemProduct.productSalePrice}0</span>
+                            class="span_product_sale_price">${orderItem.product.productSalePrice}0</span>
                     </td>
                     <td><span class="span_productOrderItem_number">${orderItem.productOrderItemNumber}</span></td>
                     <td><span class="span_productOrderItem_price"
@@ -136,21 +136,22 @@
                         var yn = confirm("点击确认后，您之前付款到支付宝的 ${requestScope.orderTotalPrice}0 元将直接到卖家账户里，请务必收到货再确认！");
                         if (yn) {
                             $.ajax({
-                                url: "/mall/order/success/${requestScope.productOrder.productOrderCode}",
-                                type: "PUT",
+                                url: "/success/${requestScope.productOrder.productOrderCode}",
+                                type: "post",
                                 data: null,
                                 dataType: "json",
                                 success: function (data) {
-                                    if (data.success) {
-                                        location.href = "/mall/order/success/${requestScope.productOrder.productOrderCode}";
+                                    console.log(data)
+                                    if (data!=null) {
+                                        location.href = "/order/${sessionScope.user.userId}";
                                     } else {
-                                        alert("订单确认异常，请稍后再试！");
-                                        location.href = "/mall/order/0/10";
+                                        alert("订单确认异常，请稍后再试！！！");
+                                        location.href = "/order/${sessionScope.user.userId}";
                                     }
                                 },
                                 error: function (data) {
                                     alert("订单确认异常，请稍后再试！");
-                                    location.href = "/mall/order/0/10";
+                                    location.href = "/order/${sessionScope.user.userId}";
                                 }
                             });
                         }

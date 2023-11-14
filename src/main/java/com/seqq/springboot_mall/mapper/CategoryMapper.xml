@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seqq.springboot_mall.mapper.CategoryMapper">
+    <select id="selectCategoryAll" resultType="com.seqq.springboot_mall.entity.Category">
+        SELECT * FROM category
+    </select>
+    <select id="selectCategoryByProductCategoryId" resultType="com.seqq.springboot_mall.entity.Category">
+        SELECT * FROM category WHERE categoryId = #{productCategoryId}
+    </select>
+</mapper>
